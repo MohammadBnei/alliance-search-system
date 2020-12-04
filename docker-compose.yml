@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+  client:
+    build: client
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    env_file: .env
+    ports:
+      - 3000
+    stdin_open: true
+    labels:
+      - traefik.http.routers.client.rule=Host(`client.localhost`)
+        
+  server:
+    build: server
+    env_file: .env
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    ports:
+      - 3000
+    stdin_open: true
+    labels:
+      - traefik.http.routers.server.rule=Host(`server.localhost`)
+
+  reverse-proxy:
+      # The official v2 Traefik docker image
+      image: traefik:v2.3
+      # Enables the web UI and tells Traefik to listen to docker
+      command: --api.insecure=true --providers.docker
+      ports:
+          # The HTTP port
+          - 80:80
+          - 443:443
+          # The Web UI (enabled by --api.insecure=true)
+          - 8000:8080
+      volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+          - ./traefik/traefik.toml:/traefik.toml
+          - ./traefik/acme.json:/acme.json

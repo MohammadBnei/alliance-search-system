@@ -2,6 +2,7 @@ const Hapi = require('@hapi/hapi');
 const Boom = require('@hapi/boom');
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
+const is = require('is_js');
 
 const SWAPI_URl = 'http://swapi.dev/api/';
 const PORT = process.env.PORT || 3000;
@@ -52,7 +53,10 @@ const init = async () => {
     const server = Hapi.server({
         debug: { log: ['*'] },
         port: PORT,
-        host: '0.0.0.0'
+        host: '0.0.0.0',
+        routes: {
+            cors: true
+        }
     });
 
     // await server.register(require('@hapi/jwt'));
@@ -77,15 +81,14 @@ const init = async () => {
         path: '/api/search',
         handler: async (request, h) => {
             // TODO : Move token logic to a plugin
-            verifyToken(request);
-            const resource = request.query.resource
-            const searchTerm = request.query.term
+            // verifyToken(request);
+            const { resource, term: searchTerm } = request.query
 
             if (RESOURCE_LIST.indexOf(resource) === -1)
                 throw Boom.badRequest(resource ? `${resource} not in avalaible resource : ${RESOURCE_LIST.join(', ')}` : 'No resource specified. You must provide one.')
 
             if (!searchTerm)
-                throw Boom.badRequest('You must specify a search term (')
+                throw Boom.badRequest('You must specify a search term')
 
             const result = await (await fetch(`${SWAPI_URl}${resource}/?search=${searchTerm}`)).json()
 
@@ -103,10 +106,50 @@ const init = async () => {
     });
 
     server.route({
-        method: 'OPTIONS',
+        method: 'GET',
+        path: '/api/element',
+        handler: async (request, h) => {
+            // TODO : Move token logic to a plugin
+            // verifyToken(request);
+            const { url } = request.query
+
+            if (!url || is.not.url(url))
+                throw Boom.badRequest('You must specify a correct url')
+
+            const result = await (await fetch(url)).json()
+
+            request.log('log', url)
+
+            return result;
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/api/element/{id}',
+        handler: async (request, h) => {
+            // TODO : Move token logic to a plugin
+            // verifyToken(request);
+            const { resource } = request.query
+            const { id } = request.params
+
+            if (!id)
+                throw Boom.badRequest('No id specified')
+
+            if (RESOURCE_LIST.indexOf(resource) === -1)
+                throw Boom.badRequest(resource ? `${resource} not in avalaible resource : ${RESOURCE_LIST.join(', ')}` : 'No resource specified. You must provide one.')
+
+            const result = await (await fetch(`${SWAPI_URl}${resource}/${id}`)).json()
+
+            return result;
+        }
+    });
+
+    server.route({
+        method: ['GET', 'OPTIONS'],
         path: '/api/',
         handler: async (request, h) => {
-            return {resourceList: RESOURCE_LIST};
+            return { resourceList: RESOURCE_LIST };
         }
     });
 

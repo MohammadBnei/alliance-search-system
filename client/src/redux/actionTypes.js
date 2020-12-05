@@ -3,15 +3,21 @@ export const UNAUTH_USER = 'UNAUTH_USER'
 export const AUTH_ERROR = 'AUTH_ERROR'
 
 export const ERROR = 'ERROR'
+export const LOADING = 'LOADING'
+export const END_LOADING = 'END_LOADING'
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE'
 export const USER_LOGOUT = 'USER_LOGOUT'
 
 export const ADD_USER = 'ADD_USER'
 
-export const SEARCH = 'SEARCH'
-export const SET_SEARCH_OPTIONS = 'SET_SEARCH_OPTIONS'
+export const SET_TERM = 'SET_TERM'
+export const SET_RESOURCE = 'SET_RESOURCE'
+export const SET_RESOURCE_LIST = 'SET_RESOURCE_LIST'
 
+export const SET_SELECTION = 'SET_SELECTION'
+export const SET_SEARCH_RESULT = 'SET_SEARCH_RESULT'
 
-
-
+export const SET_CHOOSEN_ELEMENT = 'SET_CHOOSEN_ELEMENT'
+export const SET_OTHER_ELEMENT = 'SET_OTHER_ELEMENT'
+export const REMOVE_OTHER_ELEMENT = 'REMOVE_OTHER_ELEMENT'

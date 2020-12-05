@@ -8,9 +8,9 @@ import { ConnectedRouter } from 'connected-react-router'
 
 import './App.css'
 
-import SignIn from './views/signIn'
+import SignIn from './entity/auth/SignIn'
 import Home from './views/Home'
-import SignUp from './components/user/signUp'
+// import SignUp from './components/user/signUp'
 import { Provider } from 'react-redux'
 import store, { history } from './redux/store'
 
@@ -26,9 +26,9 @@ function App () {
                         <Route path="/signin">
                             <SignIn />
                         </Route>
-                        <Route path="/signup">
+                        {/* <Route path="/signup">
                             <SignUp />
-                        </Route>
+                        </Route> */}
                     </Switch>
                 </div>
             </ConnectedRouter>

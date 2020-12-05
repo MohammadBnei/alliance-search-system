@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { signUserIn } from '../redux/actions/auth'
+import { signUserIn } from './action'
 
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
@@ -92,7 +92,7 @@ const SignIn = () => {
                         required
                         fullWidth
                         id="email"
-                        label="Email Address"
+                        label="Username"
                         name="email"
                         autoComplete="email"
                         autoFocus
@@ -127,14 +127,9 @@ const SignIn = () => {
         Sign In
                     </Button>
                     <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                Forgot password?
-                            </Link>
-                        </Grid>
                         <Grid item>
-                            <Link component={RouterLink} to="/signup" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                            <Link component={RouterLink} to="/" variant="body2">
+                                {"Don't have an account? Continue as Anonymous"}
                             </Link>
                         </Grid>
                     </Grid>

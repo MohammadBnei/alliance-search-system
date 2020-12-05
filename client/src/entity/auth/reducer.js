@@ -2,7 +2,7 @@ import {
     AUTH_USER,
     UNAUTH_USER,
     AUTH_ERROR
-} from '../actionTypes'
+} from '../../redux/actionTypes'
 
 export default function (state = {
     authenticated: !!localStorage.getItem('auth_jwt_token')

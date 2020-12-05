@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -6,20 +6,22 @@ import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
+import { Link as RouterLink } from 'react-router-dom';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 // import { mainListItems, secondaryListItems } from './listItems';
-import SearchBar from '../components/search';
+import SearchBar from '../entity/search/SearchBar';
+import SearchResult from '../entity/search/SearchResult';
+import Choosen from '../entity/choosen/Choosen';
+import { Backdrop, CircularProgress, List, ListItem, ListItemText } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
 
@@ -28,7 +30,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-      Star Wars Rebels Alliance
+        Star Wars Rebels Alliance
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -113,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 240,
+    height: 640,
   },
   searchBar: {
     height: 120,
@@ -122,7 +124,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const { loading: loader } = useSelector(({ meta }) => meta)
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -140,7 +143,7 @@ export default function Dashboard() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            component={RouterLink} to="/signin"
             className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
           >
             <MenuIcon />
@@ -149,25 +152,12 @@ export default function Dashboard() {
             Search System
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary">
-              <NotificationsIcon />
-            </Badge>
+            <Backdrop open={loader}>
+              <CircularProgress color="inherit" />
+            </Backdrop>
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-      </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
@@ -178,13 +168,15 @@ export default function Dashboard() {
               </Paper>
             </Grid>
             {/* Recent Deposits */}
-            <Grid item xs={12} >
+            <Grid item xs={6} >
               <Paper className={fixedHeightPaper}>
+                <SearchResult />
               </Paper>
             </Grid>
             {/* Recent Orders */}
-            <Grid item xs={12} >
+            <Grid item xs={6} >
               <Paper className={fixedHeightPaper}>
+                <Choosen />
               </Paper>
             </Grid>
           </Grid>

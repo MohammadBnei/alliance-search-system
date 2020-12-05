@@ -1,30 +1,45 @@
 import { combineReducers } from 'redux'
 import { connectRouter } from 'connected-react-router'
 
-import auth from './auth'
-import user from './user'
-import search from './search'
+import auth from '../../entity/auth/reducer'
+// import user from '../../entity/user/reducer'
+import search from '../../entity/search/reducer'
+import choosen from '../../entity/choosen/reducer'
 
-import { ERROR } from '../actionTypes'
+import {
+    ERROR, LOADING,
+    END_LOADING
+} from '../actionTypes'
 
-const error = (state = { errors: [] }, { type, payload }) => {
+const meta = (state = { errors: [], loading: false }, { type, payload }) => {
     switch (type) {
-    case ERROR:
-        return {
-            ...state,
-            errors: [...state.errors, payload]
-        }
-    default:
-        return state
+        case ERROR:
+            return {
+                ...state,
+                errors: [payload, ...state.errors]
+            }
+        case LOADING:
+            return {
+                ...state,
+                loading: true
+            }
+        case END_LOADING:
+            return {
+                ...state,
+                loading: false
+            }
+        default:
+            return state
     }
 }
 
 const createRootReducer = history => combineReducers({
     router: connectRouter(history),
     auth,
-    user,
+    // user,
     search,
-    error
+    choosen,
+    meta
 })
 
 export default createRootReducer

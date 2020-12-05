@@ -2,13 +2,14 @@ import { Container, Grid, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
+import is from 'is_js';
 import { setElementFromRoute } from './actions';
-import Film from './component/Film';
-import People from './component/People';
+import Element from './component/Element';
+import RelatedElements from './component/RelatedElements';
 
 export default function Choosen() {
     const { element } = useSelector(({ choosen }) => choosen)
-    const [type, setType] = useState(null);
+    const [relatedElements, setRelatedElements] = useState(null);
     const search = useLocation().search
     const dispatch = useDispatch();
 
@@ -22,10 +23,12 @@ export default function Choosen() {
         if (!element)
             return
 
-        const { url } = element
-        const [resource, _] = url.split('/').filter(e => e).slice(-2)
-
-        setType(resource)
+        setRelatedElements(Object.keys(element).reduce((acc, cur) => {
+            if (is.array(element[cur])) {
+                acc[cur] = element[cur].filter(c => is.url(c))
+            }
+            return acc
+        }, {}))
     }, [element])
 
     if (!element)
@@ -36,8 +39,12 @@ export default function Choosen() {
     return (
         <Container>
             <Grid container spacing={3}>
-                {type === 'films' && <Film film={element} />}
-                {type === 'people' && <People people={element} />}
+                <Element element={element} />
+                {relatedElements && (
+                    <Grid item xs={12}>
+                        <RelatedElements elements={relatedElements} />
+                    </Grid>
+                )}
             </Grid>
         </Container>
     )

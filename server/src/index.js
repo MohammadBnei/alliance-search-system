@@ -118,6 +118,16 @@ const init = async () => {
 
             const result = await (await fetch(url)).json()
 
+            //TODO : Push to client
+            /**
+             * Object.keys(element).reduce((acc, cur) => {
+                    if (is.array(element[cur])) {
+                        acc[cur] = element[cur].filter(c => is.url(c))
+                    }
+                    return acc
+                }, {})
+             */
+
             request.log('log', url)
 
             return result;

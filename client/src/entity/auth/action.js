@@ -14,7 +14,9 @@ export function signUserIn (data) {
     return (dispatch) => {
         // Submit email/password to server
         axios
-            .post(AUTH_URL + 'signin/', data)
+            .post(AUTH_URL + 'signin/', data , {
+
+            })
             .then(res => {
                 dispatch({ type: AUTH_USER })
                 localStorage.setItem('auth_jwt_token', res.data.token)

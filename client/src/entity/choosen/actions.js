@@ -1,5 +1,6 @@
 import { routerActions } from 'connected-react-router'
-import axios from '../../conf'
+import is from 'is_js'
+import axios, { extractParamsFromUrl } from '../../conf'
 import {
     ERROR,
     SET_CHOOSEN_ELEMENT,
@@ -7,21 +8,24 @@ import {
     REMOVE_OTHER_ELEMENT
 } from '../../redux/actionTypes'
 
-export function setElement(url) {
-    return (dispatch) => {
-        searchElement(url)
-            .then(res => {
-                dispatch({ type: SET_CHOOSEN_ELEMENT, payload: res.data })
-                const [resource, id] = url.split('/').filter(e => e).slice(-2)
-                dispatch(routerActions.push({
-                    pathname: '/',
-                    search: `?resource=${resource}&id=${id}`
-                }))
-            })
-            .catch(error => {
+export function setElement(payload) {
+    return async (dispatch) => {
+        let data = payload;
+        if (is.url(payload)) {
+            try {
+                data = (await searchElement(payload)).data
+            } catch (error) {
                 console.log(error)
                 dispatch({ type: ERROR, payload: error.response })
-            })
+            }
+        }
+
+        dispatch({ type: SET_CHOOSEN_ELEMENT, payload: data })
+        const [resource, id] = extractParamsFromUrl(data.url)
+        dispatch(routerActions.push({
+            pathname: '/',
+            search: `?resource=${resource}&id=${id}`
+        }))
     }
 }
 
@@ -60,5 +64,5 @@ export function removeOtherElement(url) {
 
 
 
-const searchElement = (url) => axios
-    .get('/element', { params: { url } }) 
+export const searchElement = (url) => axios
+    .get('/element', { params: { url } })

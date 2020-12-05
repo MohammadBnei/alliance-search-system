@@ -11,7 +11,7 @@ export default function (state = {
         case SET_CHOOSEN_ELEMENT:
             return {
                 ...state,
-                element: payload,
+                element: { ...payload },
             }
         case SET_OTHER_ELEMENT:
             return {

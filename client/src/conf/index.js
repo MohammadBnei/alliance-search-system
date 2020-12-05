@@ -26,3 +26,9 @@ axios.interceptors.response.use((res) => {
 })
 
 export default axios
+
+/**
+ * Returns [resource, id]
+ * @param {*} url 
+ */
+export const extractParamsFromUrl = url => url.split('/').filter(e => e).slice(-2)

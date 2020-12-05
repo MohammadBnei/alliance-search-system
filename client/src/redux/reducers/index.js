@@ -11,7 +11,7 @@ import {
     END_LOADING
 } from '../actionTypes'
 
-const meta = (state = { errors: [], loading: false }, { type, payload }) => {
+const meta = (state = { errors: [], loading: 0 }, { type, payload }) => {
     switch (type) {
         case ERROR:
             return {
@@ -21,12 +21,12 @@ const meta = (state = { errors: [], loading: false }, { type, payload }) => {
         case LOADING:
             return {
                 ...state,
-                loading: true
+                loading: ++state.loading
             }
         case END_LOADING:
             return {
                 ...state,
-                loading: false
+                loading: --state.loading
             }
         default:
             return state

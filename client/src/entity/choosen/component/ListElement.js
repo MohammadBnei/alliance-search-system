@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Grid, makeStyles, Paper } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { newError } from '../../../redux/actions/error';
-import { searchElement, setElement as setElementAction } from '../actions';
+import { searchElement, setElement as setElementAction, sourceCancelRequest } from '../actions';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -17,16 +17,22 @@ export default function ListElement({ url }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        let cancel;
         (async () => {
             try {
-                const { data } = await searchElement(url)
+                let [data, cancelRequest] = searchElement(url)
+                cancel = cancelRequest.cancel
+                data = await data
                 setElement(data)
             } catch (error) {
+                console.log(error)
                 dispatch(newError(error.message))
             } finally {
                 setLoading(false)
             }
         })()
+
+        // return () => cancel()
     }, [])
 
 

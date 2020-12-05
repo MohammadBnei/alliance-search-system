@@ -13,7 +13,7 @@ const logger = createLogger()
 export const history = createBrowserHistory()
 
 const enhancer = compose(
-    applyMiddleware(thunk, logger, routerMiddleware(history)),
+    applyMiddleware(thunk, routerMiddleware(history)),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 

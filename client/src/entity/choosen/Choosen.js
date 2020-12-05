@@ -8,7 +8,7 @@ import Element from './component/Element';
 import RelatedElements from './component/RelatedElements';
 
 export default function Choosen() {
-    const { element } = useSelector(({ choosen }) => choosen)
+    const element = useSelector(({ choosen }) => choosen.element)
     const [relatedElements, setRelatedElements] = useState(null);
     const search = useLocation().search
     const dispatch = useDispatch();

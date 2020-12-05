@@ -22,7 +22,8 @@ axios.interceptors.response.use((res) => {
 }, err => {
     store.dispatch({type: END_LOADING})
 
-    store.dispatch({type: ERROR, payload: `${err.response.status} ${err.response.message}`})
+    if (err.response)
+        store.dispatch({type: ERROR, payload: `${err.response.status} ${err.response.message}`})
 })
 
 export default axios

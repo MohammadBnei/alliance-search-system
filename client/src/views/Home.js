@@ -97,7 +97,7 @@ export default function Dashboard() {
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <IconButton
+          {/* <IconButton
             edge="start"
             color="inherit"
             aria-label="open drawer"
@@ -105,7 +105,7 @@ export default function Dashboard() {
             className={clsx(classes.menuButton)}
           >
             <VpnKeyIcon />
-          </IconButton>
+          </IconButton> */}
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Search System
           </Typography>

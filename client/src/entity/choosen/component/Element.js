@@ -15,6 +15,7 @@ export default function Element({ element }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        setCurrentElement(element)
         if (is.url(element)) {
             (async () => {
                 try {

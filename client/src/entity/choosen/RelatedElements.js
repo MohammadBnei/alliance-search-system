@@ -27,37 +27,40 @@ export default function RelatedElements() {
             return acc
         }, {}))
         const sse = new EventSource(`${SWAPI_API_URI}related?url=${choosenElement.url}`)
-        sse.onmessage = (message) => {
-            try {
-                const data = JSON.parse(message.data)
-                setRelatedElements(el => {
-                    let [resource] = extractParamsFromUrl(data.url)
-                    const [choosenResource] = extractParamsFromUrl(choosenElement.url)
-                    if(resource === 'people' &&  choosenResource === 'films') {
-                        resource = 'characters'
-                    }
-                    if(resource === 'people' &&  choosenResource === 'planets') {
-                        resource = 'residents'
-                    }
-                    const elementIndex = el[resource]?.findIndex(url => url === data.url)
-                    el[resource]?.splice(elementIndex, 1, data)
 
-                    return {...el}
-                })
-            } catch (error) {
-                console.log(error);
-            }
-        }
+        sse.onmessage = sseHandler
 
         return () => sse.close()
     }, [choosenElement])
+
+    const sseHandler = (message) => {
+        try {
+            const data = JSON.parse(message.data)
+            setRelatedElements(el => {
+                let [resource] = extractParamsFromUrl(data.url)
+                const [choosenResource] = extractParamsFromUrl(choosenElement.url)
+                if (resource === 'people' && choosenResource === 'films') {
+                    resource = 'characters'
+                }
+                if (resource === 'people' && choosenResource === 'planets') {
+                    resource = 'residents'
+                }
+                const elementIndex = el[resource]?.findIndex(url => url === data.url)
+                el[resource]?.splice(elementIndex, 1, data)
+
+                return { ...el }
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return Object.entries(relatedElements).map(([key, val], i) =>
         <Accordion key={i}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
-                id="panel1a-header"
+                id={"panel1a-header" + key}
             >
                 <Typography className={classes.heading} >{key}</Typography>
             </AccordionSummary>
@@ -71,3 +74,4 @@ export default function RelatedElements() {
         </Accordion>
     )
 }
+

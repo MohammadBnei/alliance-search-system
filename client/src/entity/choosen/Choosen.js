@@ -16,8 +16,7 @@ export default function Choosen() {
         const { resource, id } = getQueryParams(search)
         if (resource && id)
             dispatch(setElementFromRoute({ resource, id }))
-    }, [])
-
+    }, [search])
     if (!element)
         return (<Typography component="h1" variant="h6" color="inherit" noWrap>
             No element selected ! Search one
@@ -39,8 +38,9 @@ export default function Choosen() {
 }
 
 const getQueryParams = (search) => {
-    const resource = new URLSearchParams(search).get('resource');
-    const id = new URLSearchParams(search).get('id');
+    const params = new URLSearchParams(search)
+    const resource = params.get('resource');
+    const id = params.get('id');
 
     return { resource, id }
 }

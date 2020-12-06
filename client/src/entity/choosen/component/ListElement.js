@@ -3,6 +3,8 @@ import { Button, CircularProgress, Grid, makeStyles, Paper } from '@material-ui/
 import { useDispatch } from 'react-redux';
 import { setElement as setElementAction } from '../actions';
 import is from 'is_js';
+import { extractParamsFromUrl } from '../../../conf';
+import { routerActions } from 'connected-react-router';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -15,8 +17,15 @@ export default function ListElement({ val }) {
     const dispatch = useDispatch();
 
     const handleClick = () => {
-        if (is.not.url(val))
+        if (is.url(val)) {
+            const [resource, id] = extractParamsFromUrl(val)
+            dispatch(routerActions.push({
+                pathname: '/',
+                search: `?resource=${resource}&id=${id}`
+            }))
+        } else {
             dispatch(setElementAction(val))
+        }
     }
 
     return (

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const fetch = require('node-fetch')
 const is = require('is_js')
 const { getToken } = require('../token')
-const { RESOURCE_LIST, SWAPI_URL } = require('../config')
+let { RESOURCE_LIST, SWAPI_URL } = require('../config')
 
 
 module.exports = {
@@ -100,22 +100,17 @@ module.exports = {
             }
             return acc
         }, []).flat()
-
-        const promises = []
-
-        for (const elementUrl of relatedElements) {
-            promises.push((await fetch(elementUrl)).json()
-                .then((data) => {
-                    res.write(`data: ${JSON.stringify(data)}`)
-                    res.write('\n\n')
-                })
-                .catch(err => console.log(err))
-            )
-        }
-
-        await Promise.all(promises)
-
-        res.write('end\n\n')
+        
+        Promise.all(relatedElements.map(async elementUrl => {
+            try {
+                const data = await (await fetch(elementUrl)).json()
+                res.write(`data: ${JSON.stringify(data)}\n\n`)
+            } catch (error) {
+                console.log(error, 'Wesh ?')
+            }
+        })).then(() => {  
+            res.write(`data: ${JSON.stringify({end: true})}\n\n`)
+        })
     },
 
     getElementById: async (req, res) => {
@@ -151,7 +146,9 @@ module.exports = {
         }
     },
 
-    getResource: (req, res) => {
+    getResource: async (req, res) => {
+        const resource = await (await fetch(SWAPI_URL)).json()
+        RESOURCE_LIST = Object.keys(resource)
         res.send({ resourceList: RESOURCE_LIST })
     }
 }

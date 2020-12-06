@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Grid, makeStyles, Typography } from '@material-ui/core'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ListElement from './component/ListElement';
-import { extractParamsFromUrl, SWAPI_API_URI } from '../../conf';
-import { useSelector } from 'react-redux';
-import is from 'is_js';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ListElement from './component/ListElement'
+import { EVENTS_API_URI, extractParamsFromUrl } from '../../conf'
+import { useSelector } from 'react-redux'
+import is from 'is_js'
 
 const useStyles = makeStyles((theme) => ({
     heading: {
         fontSize: theme.typography.pxToRem(15),
         fontWeight: theme.typography.fontWeightRegular,
         textTransform: 'capitalize'
-    },
-}));
+    }
+}))
 
-export default function RelatedElements() {
-    const classes = useStyles();
-    const choosenElement = useSelector(({ choosen }) => choosen.element);
-    const [relatedElements, setRelatedElements] = useState({});
+let sse
+
+export default function RelatedElements () {
+    const classes = useStyles()
+    const choosenElement = useSelector(({ choosen }) => choosen.element)
+    const [relatedElements, setRelatedElements] = useState({})
 
     useEffect(() => {
         setRelatedElements(Object.keys(choosenElement).reduce((acc, cur) => {
@@ -26,7 +28,7 @@ export default function RelatedElements() {
             }
             return acc
         }, {}))
-        const sse = new EventSource(`${SWAPI_API_URI}related?url=${choosenElement.url}`)
+        sse = new EventSource(`${EVENTS_API_URI}related?url=${choosenElement.url}`)
 
         sse.onmessage = sseHandler
 
@@ -36,6 +38,12 @@ export default function RelatedElements() {
     const sseHandler = (message) => {
         try {
             const data = JSON.parse(message.data)
+            if (data.end === true) {
+                console.log('Stream Ended')
+                sse.close()
+                return
+            }
+
             setRelatedElements(el => {
                 let [resource] = extractParamsFromUrl(data.url)
                 const [choosenResource] = extractParamsFromUrl(choosenElement.url)
@@ -47,13 +55,14 @@ export default function RelatedElements() {
                 }
                 if (el[resource]) {
                     const elementIndex = el[resource].findIndex(url => url === data.url)
-                    el[resource].splice(elementIndex, 1, data)
+                    elementIndex !== -1 && el[resource].splice(elementIndex, 1, data)
+                    return { ...el }
                 }
 
-                return { ...el }
+                return el
             })
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     }
 
@@ -62,7 +71,7 @@ export default function RelatedElements() {
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
-                id={"panel1a-header" + key}
+                id={'panel1a-header' + key}
             >
                 <Typography className={classes.heading} >{key}</Typography>
             </AccordionSummary>
@@ -76,4 +85,3 @@ export default function RelatedElements() {
         </Accordion>
     )
 }
-

@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect } from 'react';
-import { Container, debounce, Grid, MenuItem, TextField } from '@material-ui/core';
-import { fetchOptions, setResource, setTerm } from './actions';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useEffect } from 'react'
+import { Container, debounce, Grid, MenuItem, TextField } from '@material-ui/core'
+import { fetchOptions, setResource, setTerm } from './actions'
+import { useDispatch, useSelector } from 'react-redux'
 
-export default function SearchBar() {
+export default function SearchBar () {
     const { resourceList, resource } = useSelector(({ search }) => search)
     const dispatch = useDispatch()
 
     const searchDebounce = useCallback(
         debounce((_searchVal) => {
             dispatch(setTerm(_searchVal))
-            // send the server request here		
+            // send the server request here
         }, 200),
         []
-    );
+    )
 
     useEffect(() => {
         dispatch(fetchOptions())

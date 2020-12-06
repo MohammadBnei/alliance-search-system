@@ -8,9 +8,9 @@ import {
     REMOVE_OTHER_ELEMENT
 } from '../../redux/actionTypes'
 
-export function setElement(payload) {
+export function setElement (payload) {
     return async (dispatch) => {
-        let data = payload;
+        let data = payload
         if (is.url(payload)) {
             try {
                 data = (await searchElement(payload)).data
@@ -29,7 +29,7 @@ export function setElement(payload) {
     }
 }
 
-export function setElementFromRoute({ resource, id }) {
+export function setElementFromRoute ({ resource, id }) {
     return (dispatch) => {
         axios
             .get('/element/' + id, { params: { resource } })
@@ -43,7 +43,7 @@ export function setElementFromRoute({ resource, id }) {
     }
 }
 
-export function setOtherElement(url) {
+export function setOtherElement (url) {
     return (dispatch) => {
         searchElement(url)
             .then(res => {
@@ -56,7 +56,7 @@ export function setOtherElement(url) {
     }
 }
 
-export function removeOtherElement(url) {
+export function removeOtherElement (url) {
     return (dispatch) => {
         dispatch({ type: REMOVE_OTHER_ELEMENT, payload: url })
     }

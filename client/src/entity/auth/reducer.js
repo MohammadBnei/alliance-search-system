@@ -1,6 +1,6 @@
 import {
     AUTH_USER,
-    LOGOUT,
+    LOGOUT
 } from '../../redux/actionTypes'
 
 export default function (state = {

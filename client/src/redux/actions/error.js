@@ -1,6 +1,6 @@
-import { ERROR } from "../actionTypes"
+import { ERROR } from '../actionTypes'
 
-export function newError(message) {
+export function newError (message) {
     return dispatch => {
         dispatch({ type: ERROR, payload: message })
     }

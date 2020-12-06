@@ -13,12 +13,14 @@ import Home from './views/Home'
 // import SignUp from './components/user/signUp'
 import { Provider } from 'react-redux'
 import store, { history } from './redux/store'
+import Utils from './entity/Utils'
 
-function App () {
+function App() {
     return (
         <Provider store={store}>
             <ConnectedRouter history={history}>
                 <div className="App">
+                    <Utils />
                     <Switch>
                         <Route exact path="/">
                             <Home />

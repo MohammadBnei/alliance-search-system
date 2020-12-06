@@ -1,10 +1,10 @@
-import axios, { API_URI } from '../../conf'
+import axios, { SWAPI_API_URI } from '../../conf'
 import { ERROR, SET_RESOURCE, SET_RESOURCE_LIST, SET_SEARCH_RESULT, SET_SELECTION, SET_TERM } from '../../redux/actionTypes'
 
 export function fetchOptions() {
     return (dispatch) => {
         axios
-            .get('/')
+            .get('/resource')
             .then(res => {
                 dispatch({ type: SET_RESOURCE_LIST, payload: res.data.resourceList })
             })

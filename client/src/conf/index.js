@@ -2,12 +2,12 @@ import axios from 'axios'
 import { END_LOADING, ERROR, LOADING } from '../redux/actionTypes';
 import store from '../redux/store';
 
-export const API_URI = process.env.API_URI || 'http://server.localhost/api/'
-export const AUTH_URL = process.env.AUTH_URL || 'http://server.localhost/auth/'
+export const SWAPI_API_URI = process.env.SWAPI_API_URI || 'https://localhost/api/swapi/'
+export const AUTH_URL = process.env.AUTH_URL || 'https://localhost/api/auth/'
 
-axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded;charset=utf-8';
-axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-axios.defaults.baseURL = API_URI;
+// axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded;charset=utf-8';
+// axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.defaults.baseURL = SWAPI_API_URI;
 
 axios.interceptors.request.use((req) => {
     store.dispatch({type: LOADING, payload: `${req.method} ${req.url}`})
@@ -23,7 +23,7 @@ axios.interceptors.response.use((res) => {
     store.dispatch({type: END_LOADING})
 
     if (err.response)
-        store.dispatch({type: ERROR, payload: `${err.response.status} ${err.response.message}`})
+        store.dispatch({type: ERROR, payload: err.response.data?.message || 'Something went wrong'})
 })
 
 export default axios

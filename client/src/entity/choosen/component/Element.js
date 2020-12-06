@@ -25,8 +25,7 @@ export default function Element({ element }) {
                 }
             })()
         } else {
-            const { url } = element
-            const [resource] = extractParamsFromUrl(url)
+            const [resource] = extractParamsFromUrl(element.url)
             setType(resource)
         }
     }, [element])

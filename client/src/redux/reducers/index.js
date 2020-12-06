@@ -16,7 +16,7 @@ const meta = (state = { errors: [], loading: 0 }, { type, payload }) => {
         case ERROR:
             return {
                 ...state,
-                errors: [payload, ...state.errors]
+                errors: [...state.errors, payload]
             }
         case LOADING:
             return {

@@ -1,0 +1,8 @@
+POST http://localhost:8080/api/marchands
+content-type: application/json
+
+{
+    "societyName": "test society Name",
+    "kbis": "test kbis",
+    "phoneNumber": "0661939082"
+}

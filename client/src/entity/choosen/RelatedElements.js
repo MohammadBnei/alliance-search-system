@@ -45,8 +45,10 @@ export default function RelatedElements() {
                 if (resource === 'people' && choosenResource === 'planets') {
                     resource = 'residents'
                 }
-                const elementIndex = el[resource]?.findIndex(url => url === data.url)
-                el[resource]?.splice(elementIndex, 1, data)
+                if (el[resource]) {
+                    const elementIndex = el[resource].findIndex(url => url === data.url)
+                    el[resource].splice(elementIndex, 1, data)
+                }
 
                 return { ...el }
             })

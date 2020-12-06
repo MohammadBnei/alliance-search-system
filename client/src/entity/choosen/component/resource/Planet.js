@@ -1,7 +1,7 @@
-import { Divider, Grid, Typography } from '@material-ui/core';
-import React from 'react';
+import { Divider, Grid, Typography } from '@material-ui/core'
+import React from 'react'
 
-export default function Planet({ planet }) {
+export default function Planet ({ planet }) {
     return (
         <>
             <Grid item xs={12} >
@@ -52,5 +52,4 @@ export default function Planet({ planet }) {
 
         </>
     )
-
 }

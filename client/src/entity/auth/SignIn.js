@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { Link as RouterLink } from 'react-router-dom'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { signUserIn } from './action'
 
 import Avatar from '@material-ui/core/Avatar'
@@ -18,7 +18,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { push } from 'connected-react-router'
 
 function Copyright () {
     return (
@@ -56,7 +55,6 @@ const useStyles = makeStyles(theme => ({
 const SignIn = () => {
     const classes = useStyles()
 
-    const authenticated = useSelector(({ auth: { authenticated } }) => authenticated)
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')

@@ -37,6 +37,7 @@ services:
       - ./nginx/html:/etc/nginx/html
     depends_on:
       - api-swapi
+      - api-user
       - client
     ports:
       - 80:80

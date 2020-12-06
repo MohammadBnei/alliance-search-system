@@ -1,7 +1,7 @@
-import { Divider, Grid, Typography } from '@material-ui/core';
-import React from 'react';
+import { Divider, Grid, Typography } from '@material-ui/core'
+import React from 'react'
 
-export default function Film({ film }) {
+export default function Film ({ film }) {
     return (
         <>
             <Grid item xs={12} >
@@ -17,7 +17,7 @@ export default function Film({ film }) {
             </Grid>
             <Grid item xs={12} >
                 <Typography variant="subtitle1" gutterBottom>
-                    Director : {film.director} 
+                    Director : {film.director}
                 </Typography>
             </Grid>
             <Grid item xs={12} >
@@ -32,5 +32,4 @@ export default function Film({ film }) {
             </Grid>
         </>
     )
-
 }

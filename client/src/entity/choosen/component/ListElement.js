@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Grid, makeStyles, Paper } from '@material-ui/core';
+import React, { } from 'react';
+import { Button, CircularProgress, Grid, makeStyles, Paper } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import { newError } from '../../../redux/actions/error';
-import { searchElement, setElement as setElementAction, sourceCancelRequest } from '../actions';
+import { setElement as setElementAction } from '../actions';
+import is from 'is_js';
+import { extractParamsFromUrl } from '../../../conf';
+import { routerActions } from 'connected-react-router';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -10,44 +12,31 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function ListElement({ url }) {
+export default function ListElement({ val }) {
     const classes = useStyles()
     const dispatch = useDispatch();
-    const [element, setElement] = useState({});
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        let cancel;
-        (async () => {
-            try {
-                let [data, cancelRequest] = searchElement(url)
-                cancel = cancelRequest.cancel
-                data = await data
-                setElement(data)
-            } catch (error) {
-                console.log(error)
-                dispatch(newError(error.message))
-            } finally {
-                setLoading(false)
-            }
-        })()
-
-        // return () => cancel()
-    }, [])
-
-
-    if (loading)
-        return null
 
     const handleClick = () => {
-        dispatch(setElementAction(element))
-    } 
+        if (is.url(val)) {
+            const [resource, id] = extractParamsFromUrl(val)
+            dispatch(routerActions.push({
+                pathname: '/',
+                search: `?resource=${resource}&id=${id}`
+            }))
+        } else {
+            dispatch(setElementAction(val))
+        }
+    }
 
     return (
         <Grid item xs={12}>
             <Paper>
                 <Button className={classes.button} variant="outlined" color="primary" onClick={handleClick}>
-                    {element.name || element.title}
+                    {is.url(val) ? (
+                        <>
+                            <CircularProgress color="inherit" size={20} />
+                            {val}
+                        </>) : val.name || val.title}
                 </Button>
             </Paper>
         </Grid>

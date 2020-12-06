@@ -58,19 +58,14 @@ const SignIn = () => {
 
     const authenticated = useSelector(({ auth: { authenticated } }) => authenticated)
 
-    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
     const dispatch = useDispatch()
 
-    if (authenticated) {
-        dispatch(push('/dashboard'))
-        return null
-    }
-
     const trySignIn = () => {
         dispatch(signUserIn({
-            email,
+            username,
             password
         }))
     }
@@ -91,13 +86,13 @@ const SignIn = () => {
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
+                        id="username"
                         label="Username"
-                        name="email"
-                        autoComplete="email"
+                        name="username"
+                        autoComplete="username"
                         autoFocus
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
                     />
                     <TextField
                         variant="outlined"

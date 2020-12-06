@@ -1,12 +1,13 @@
+import { Typography } from '@material-ui/core';
 import is from 'is_js';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { extractParamsFromUrl } from '../../../conf';
 import { newError } from '../../../redux/actions/error';
 import { searchElement } from '../actions';
-import Film from './Film';
-import People from './People';
-import Planet from './Planet';
+import Film from './resource/Film';
+import People from './resource/People';
+import Planet from './resource/Planet';
 
 export default function Element({ element }) {
     const [type, setType] = useState(null);
@@ -15,6 +16,7 @@ export default function Element({ element }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        setCurrentElement(element)
         if (is.url(element)) {
             (async () => {
                 try {
@@ -25,19 +27,28 @@ export default function Element({ element }) {
                 }
             })()
         } else {
-            const { url } = element
-            const [resource] = extractParamsFromUrl(url)
+            const [resource] = extractParamsFromUrl(element.url)
             setType(resource)
         }
     }, [element])
 
+    const renderElement = () => {
+        switch (type) {
+            case 'people':
+                return <People people={currentElement} />
+            case 'films':
+                return <Film film={currentElement} />
+            case 'planets':
+                return <Planets planets={currentElement} />
+            default:
+                return (
+                    <Typography component="h1" variant="h6" color="inherit" noWrap>
+                        {currentElement.name || currentElement.title}
+                    </Typography>
+                    )
+        }
+    }
 
-    return (
-        <>
-            {type === 'films' && <Film film={currentElement} />}
-            {type === 'people' && <People people={currentElement} />}
-            {type === 'planets' && <Planet planet={currentElement} />}
-        </>
-    )
+    return renderElement()
 
 }

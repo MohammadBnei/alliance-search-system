@@ -14,12 +14,13 @@ import Link from '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
 
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-// import { mainListItems, secondaryListItems } from './listItems';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import SearchBar from '../entity/search/SearchBar';
 import SearchResult from '../entity/search/SearchResult';
 import Choosen from '../entity/choosen/Choosen';
 import { Backdrop, CircularProgress } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { LOGOUT } from '../redux/actionTypes';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
 
@@ -87,9 +88,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function Home() {
   const classes = useStyles();
-  const { loading: loader } = useSelector(({ meta }) => meta)
+  const { loader, authenticated } = useSelector(({ meta, auth }) => ({ loader: meta.loading, authenticated: auth.authenticated }));
+  const dispatch = useDispatch();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -97,17 +99,24 @@ export default function Dashboard() {
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <IconButton
+          {authenticated ? (<IconButton
             edge="start"
             color="inherit"
-            aria-label="open drawer"
+            onClick={e => dispatch({ type: LOGOUT })}
+            className={clsx(classes.menuButton)}
+          >
+            <MeetingRoomIcon />
+          </IconButton>) : (<IconButton
+            edge="start"
+            color="inherit"
             component={RouterLink} to="/signin"
             className={clsx(classes.menuButton)}
           >
             <VpnKeyIcon />
-          </IconButton>
+          </IconButton>)
+          }
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Search System
+            Search System {authenticated && ' (Connected)'}
           </Typography>
           <IconButton color="inherit">
             {loader !== 0 && <CircularProgress color="inherit" />}

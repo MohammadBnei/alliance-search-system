@@ -5,11 +5,10 @@ import { useLocation } from 'react-router';
 import is from 'is_js';
 import { setElementFromRoute } from './actions';
 import Element from './component/Element';
-import RelatedElements from './component/RelatedElements';
+import RelatedElements from './RelatedElements';
 
 export default function Choosen() {
-    const element = useSelector(({ choosen }) => choosen.element)
-    const [relatedElements, setRelatedElements] = useState(null);
+    const { element, authenticated } = useSelector(({ choosen, auth }) => ({ element: choosen.element, authenticated: auth.authenticated }))
     const search = useLocation().search
     const dispatch = useDispatch();
 
@@ -17,20 +16,7 @@ export default function Choosen() {
         const { resource, id } = getQueryParams(search)
         if (resource && id)
             dispatch(setElementFromRoute({ resource, id }))
-    }, [])
-
-    useEffect(() => {
-        if (!element)
-            return
-
-        setRelatedElements(Object.keys(element).reduce((acc, cur) => {
-            if (is.array(element[cur])) {
-                acc[cur] = element[cur].filter(c => is.url(c))
-            }
-            return acc
-        }, {}))
-    }, [element])
-
+    }, [search])
     if (!element)
         return (<Typography component="h1" variant="h6" color="inherit" noWrap>
             No element selected ! Search one
@@ -40,9 +26,9 @@ export default function Choosen() {
         <Container>
             <Grid container spacing={3}>
                 <Element element={element} />
-                {relatedElements && (
+                {authenticated && (
                     <Grid item xs={12}>
-                        <RelatedElements elements={relatedElements} />
+                        <RelatedElements />
                     </Grid>
                 )}
             </Grid>
@@ -52,8 +38,9 @@ export default function Choosen() {
 }
 
 const getQueryParams = (search) => {
-    const resource = new URLSearchParams(search).get('resource');
-    const id = new URLSearchParams(search).get('id');
+    const params = new URLSearchParams(search)
+    const resource = params.get('resource');
+    const id = params.get('id');
 
     return { resource, id }
 }

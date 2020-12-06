@@ -1,6 +1,6 @@
 import {
     REMOVE_OTHER_ELEMENT,
-    SET_CHOOSEN_ELEMENT, SET_OTHER_ELEMENT,
+    SET_CHOOSEN_ELEMENT as SET_CHOSEN_ELEMENT, SET_OTHER_ELEMENT,
 } from '../../redux/actionTypes'
 
 export default function (state = {
@@ -8,7 +8,7 @@ export default function (state = {
     elements: []
 }, { type, payload }) {
     switch (type) {
-        case SET_CHOOSEN_ELEMENT:
+        case SET_CHOSEN_ELEMENT:
             return {
                 ...state,
                 element: payload,

@@ -62,7 +62,5 @@ export function removeOtherElement(url) {
     }
 }
 
-
-
 export const searchElement = (url) => axios
     .get('/element', { params: { url } })

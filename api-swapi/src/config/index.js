@@ -1,4 +1,4 @@
-const RESOURCE_LIST = ['films', 'people', 'planets', 'species', 'starships', 'vehicles']
+let RESOURCE_LIST = ['films', 'people', 'planets', 'species', 'starships', 'vehicles']
 const SWAPI_URL = 'http://swapi.dev/api/'
 
 module.exports = {

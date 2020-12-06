@@ -39,7 +39,7 @@ export default function Element({ element }) {
             case 'films':
                 return <Film film={currentElement} />
             case 'planets':
-                return <Planet planets={currentElement} />
+                return <Planet planet={currentElement} />
             default:
                 return (
                     <Typography component="h1" variant="h6" color="inherit" noWrap>

@@ -14,7 +14,7 @@ export const history = createBrowserHistory()
 
 const enhancer = compose(
     applyMiddleware(thunk, routerMiddleware(history)),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 
 const store = createStore(createRootReducer(history), enhancer)

@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import is from 'is_js';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -32,13 +33,24 @@ export default function Element({ element }) {
         }
     }, [element])
 
+    const renderElement = () => {
+        switch (type) {
+            case 'people':
+                return <People people={currentElement} />
+            case 'films':
+                return <Film film={currentElement} />
+            case 'planets':
+                return <Planet planets={currentElement} />
+            default:
+                return (
+                    <Typography component="h1" variant="h6" color="inherit" noWrap>
+                        {currentElement.name || currentElement.title}
+                    </Typography>
+                    )
+        }
+    }
 
-    return (
-        <>
-            {type === 'films' && <Film film={currentElement} />}
-            {type === 'people' && <People people={currentElement} />}
-            {type === 'planets' && <Planet planet={currentElement} />}
-        </>
-    )
+
+    return renderElement()
 
 }

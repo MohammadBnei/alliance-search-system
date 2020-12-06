@@ -6,8 +6,8 @@ import { setElementFromRoute } from './actions'
 import Element from './component/Element'
 import RelatedElements from './RelatedElements'
 
-export default function Choosen () {
-    const { element, authenticated } = useSelector(({ choosen, auth }) => ({ element: choosen.element, authenticated: auth.authenticated }))
+export default function Choosen() {
+    const { element } = useSelector(({ choosen, auth }) => ({ element: choosen.element }))
     const search = useLocation().search
     const dispatch = useDispatch()
 
@@ -25,11 +25,9 @@ export default function Choosen () {
         <Container>
             <Grid container spacing={3}>
                 <Element element={element} />
-                {authenticated && (
-                    <Grid item xs={12}>
-                        <RelatedElements />
-                    </Grid>
-                )}
+                <Grid item xs={12}>
+                    <RelatedElements />
+                </Grid>
             </Grid>
         </Container>
     )

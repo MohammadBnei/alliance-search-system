@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux'
 import { connectRouter } from 'connected-react-router'
 
-import auth from '../../entity/auth/reducer'
-// import user from '../../entity/user/reducer'
 import search from '../../entity/search/reducer'
 import choosen from '../../entity/choosen/reducer'
 
@@ -35,8 +33,6 @@ const meta = (state = { errors: [], loading: 0 }, { type, payload }) => {
 
 const createRootReducer = history => combineReducers({
     router: connectRouter(history),
-    auth,
-    // user,
     search,
     choosen,
     meta

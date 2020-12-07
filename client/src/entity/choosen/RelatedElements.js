@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Grid, makeStyles, Typography } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ListElement from './component/ListElement'
@@ -19,8 +19,10 @@ let sse
 export default function RelatedElements () {
     const classes = useStyles()
     const choosenElement = useSelector(({ choosen }) => choosen.element)
+    const [expanded, setExpanded] = useState(false)
     const [relatedElements, setRelatedElements] = useState({})
-
+    const relatedSSEHandler = useCallback(() => sseHandler, [])
+    
     useEffect(() => {
         setRelatedElements(Object.keys(choosenElement).reduce((acc, cur) => {
             if (is.array(choosenElement[cur])) {
@@ -30,7 +32,7 @@ export default function RelatedElements () {
         }, {}))
         sse = new EventSource(`${EVENTS_API_URI}related?url=${choosenElement.url}`)
 
-        sse.onmessage = sseHandler
+        sse.onmessage = relatedSSEHandler
 
         return () => sse.close()
     }, [choosenElement])
@@ -66,8 +68,12 @@ export default function RelatedElements () {
         }
     }
 
+    const handleChange = (panel) => (_, isExpanded) => {
+        setExpanded(isExpanded ? panel : false)
+    }
+
     return Object.entries(relatedElements).map(([key, val], i) =>
-        <Accordion key={i}>
+        <Accordion key={i} expanded={expanded === key} onChange={handleChange}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"

@@ -1,4 +1,4 @@
-import React, { } from 'react'
+import React from 'react'
 import { Button, CircularProgress, Grid, makeStyles, Paper } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { setElement as setElementAction } from '../actions'
